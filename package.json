@@ -1,0 +1,27 @@
+{
+  "name": "server-reporter",
+  "version": "1.0.0",
+  "description": "server of report generations",
+  "main": "app.js",
+  "author": "Thomas Gouty",
+  "license": "MIT",
+  "scripts": {
+    "start-dev": "nodemon app.js",
+    "start": "node app.js",
+    "new_report": "npx zx ./newman_script.mjs"
+  },
+  "dependencies": {
+    "csv": "^5.5.0",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^10.0.0",
+    "newman": "^5.2.4",
+    "newman-reporter-html": "^1.0.5",
+    "newman-reporter-json-light": "^1.0.7",
+    "newman-reporter-json-summary": "^1.0.14",
+    "zx": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}

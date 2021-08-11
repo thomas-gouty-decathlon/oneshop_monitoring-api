@@ -1,0 +1,96 @@
+{
+    "Collection": {
+        "Info": {
+            "Name": "OneSHop API preprod",
+            "Id": "2ae8c356-eaae-4912-8e68-25d266ce2c16"
+        }
+    },
+    "Run": {
+        "Stats": {
+            "Requests": {
+                "total": 40,
+                "pending": 0,
+                "failed": 0
+            },
+            "Assertions": {
+                "total": 40,
+                "pending": 0,
+                "failed": 4
+            }
+        },
+        "Failures": [
+            {
+                "Parent": {
+                    "Name": "OneSHop API preprod",
+                    "Id": "2ae8c356-eaae-4912-8e68-25d266ce2c16"
+                },
+                "Source": {
+                    "Name": "Search",
+                    "Id": "9c96c810-ccc8-4982-af7c-fcde8f80cd9c"
+                },
+                "Error": {
+                    "Message": "expected response to have status code 200 but got 404",
+                    "Test": "EnvId: my_en - Status code is 200"
+                }
+            },
+            {
+                "Parent": {
+                    "Name": "OneSHop API preprod",
+                    "Id": "2ae8c356-eaae-4912-8e68-25d266ce2c16"
+                },
+                "Source": {
+                    "Name": "Search",
+                    "Id": "9c96c810-ccc8-4982-af7c-fcde8f80cd9c"
+                },
+                "Error": {
+                    "Message": "expected response to have status code 200 but got 404",
+                    "Test": "EnvId: ua_uk - Status code is 200"
+                }
+            },
+            {
+                "Parent": {
+                    "Name": "OneSHop API preprod",
+                    "Id": "2ae8c356-eaae-4912-8e68-25d266ce2c16"
+                },
+                "Source": {
+                    "Name": "Search",
+                    "Id": "9c96c810-ccc8-4982-af7c-fcde8f80cd9c"
+                },
+                "Error": {
+                    "Message": "expected response to have status code 200 but got 404",
+                    "Test": "EnvId: ua_ru - Status code is 200"
+                }
+            },
+            {
+                "Parent": {
+                    "Name": "OneSHop API preprod",
+                    "Id": "2ae8c356-eaae-4912-8e68-25d266ce2c16"
+                },
+                "Source": {
+                    "Name": "Search",
+                    "Id": "9c96c810-ccc8-4982-af7c-fcde8f80cd9c"
+                },
+                "Error": {
+                    "Message": "expected response to have status code 200 but got 404",
+                    "Test": "EnvId: rs_sr - Status code is 200"
+                }
+            }
+        ],
+        "Timings": {
+            "responseAverage": 794.575,
+            "responseMin": 146,
+            "responseMax": 4994,
+            "responseSd": 1145.6965542302205,
+            "dnsAverage": 0,
+            "dnsMin": 0,
+            "dnsMax": 0,
+            "dnsSd": 0,
+            "firstByteAverage": 0,
+            "firstByteMin": 0,
+            "firstByteMax": 0,
+            "firstByteSd": 0,
+            "started": 1628534330202,
+            "completed": 1628534363693
+        }
+    }
+}
