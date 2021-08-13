@@ -39,7 +39,7 @@ app.listen(port, () => {
 
 const fs = require('fs-extra')
 const path = require('path')
-const { stringify } = require('csv')
+const stringify = require('csv-stringify')
 
 const REQ_BY_COUNTRY = 4
 const COUNTRY_NUMBER = 30
@@ -98,18 +98,17 @@ async function readJsonResults(jsonPath) {
 
 // TEST cli with Iteration but no report
 
-// const newman = require('newman'); // require newman in your project
-// const stringify = require('csv-stringify')
-// const parse = require('csv-parse/lib/sync')
-// const fs = require("fs")
-// // call newman.run to pass `options` object and wait for callback
-// let data = fs.readFileSync('./csv/env_id_list.csv',
-//     { encoding: 'utf8', flag: 'r' });
-// data = parse(data, {
-//     columns: true,
-//     skip_empty_lines: true
-// })
-// console.log(data)
+const parse = require('csv-parse/lib/sync')
+// call newman.run to pass `options` object and wait for callback
+let data = fs.readFileSync('./csv/country_mapping.csv', {
+    encoding: 'utf8',
+    flag: 'r',
+})
+data = parse(data, {
+    columns: true,
+    skip_empty_lines: true,
+})
+console.log(data)
 
 // //index doesn't consider header so 0 is first data row
 // stringify(data.slice(0, 2), {
@@ -151,7 +150,7 @@ function initBotDiscord() {
     client.on('ready', () => {
         console.log(`Bot ${client.user.tag} is on 🤖🤖🤖`)
 
-        cron.schedule('30 8 * * 0-5', () => {
+        cron.schedule('40 12 * * 0-5', () => {
             console.log('running a message at every 8:30 AM of the week')
             sendMessage('The report is comming')
         })
@@ -180,11 +179,25 @@ function initBotDiscord() {
 
 function main() {
     // run discord
-    initBotDiscord()
+    // initBotDiscord()
 
     // Get reports
-    // const dir = __dirname + '/reports/staging/'
+    const dir = __dirname + '/reports/staging/'
     // console.count(dir.concat(getMostRecentFile(dir).file))
     // readJsonResults(dir.concat(getMostRecentFile(dir).file))
+
+    // read mapping csv file
+    const stringify = require('csv-stringify')
+    const parse = require('csv-parse/lib/sync')
+    // call newman.run to pass `options` object and wait for callback
+    let data = fs.readFileSync('./csv/country_mapping.csv', {
+        encoding: 'utf8',
+        flag: 'r',
+    })
+    data = parse(data, {
+        columns: true,
+        skip_empty_lines: true,
+    })
+    console.log(data)
 }
 main()
