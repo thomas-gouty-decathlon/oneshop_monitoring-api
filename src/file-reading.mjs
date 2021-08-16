@@ -1,16 +1,22 @@
 import fs from 'fs-extra'
 import path from 'path'
-import stringify from 'csv-stringify'
 import parse from 'csv-parse/lib/sync.js'
-import { dirname } from 'path'
 
 import { ENVS } from '../index.mjs'
 
 let csvMappingData = null
 
-const REQ_BY_COUNTRY = 4
-const COUNTRY_NUMBER = 30
-
+const REQ = Object.freeze({
+    ProductPage:
+        'https://api.decathlon.net/decashop/dk/v1/getPageProduct?environmentId={{ENVID}}&productId=8494856',
+    ProductList:
+        'https://api.decathlon.net/decashop/dk/v1/productList/{{ENVID}}/12845/DEFAULT',
+    Search: 'https://api.decathlon.net/decashop/dk/v1/productSearch?environmentId={{ENVID}}&query=8529458&filter=codeModel',
+    CategoryList:
+        'https://api.decathlon.net/decashop/dk/v1/categoryList?environmentId={{ENVID}}',
+    Availability1FF:
+        'https://api.decathlon.net/decashop/dk/v1/productSearch?environmentId={{ENVID}}&query=8529458&filter=codeModel',
+})
 class Report {
     constructor(file) {
         this.collectionName = file.Collection.Info.Name
@@ -18,18 +24,33 @@ class Report {
             'fr-FR',
             { timeZone: 'America/New_York' }
         )
+        this.executionTime = this._computeTimeDuration(
+            file.Run.Timings.started,
+            file.Run.Timings.completed
+        )
         this.totalReq = file.Run.Stats.Assertions.total
         this.failReqNumber = file.Run.Stats.Assertions.failed
         const fileFailures = file.Run.Failures
         this.failures =
             fileFailures.length > 0
-                ? new FailResults(fileFailures).arrFail
+                ? this._generateFailuresMapping(fileFailures)
                 : null
+    }
+    _generateFailuresMapping(failures) {
+        const res = new FailResults(failures)
+        return { errors: res.arrFail, mapping: res.getAggregationByEnvId() }
+    }
+    _computeTimeDuration(start, end) {
+        const d1 = new Date(start).getTime()
+        const d2 = new Date(end).getTime()
+        const seconds = (d2 - d1) / 1000
+        return seconds
     }
 }
 class FailResults {
     constructor(failures) {
         this.arrFail = []
+        this._envIdMap = new Map()
 
         failures.forEach((fail) => {
             const envIdValue = this._getEnvIdFrom(fail.Error.Test)
@@ -38,8 +59,10 @@ class FailResults {
                 errorCode: this._getCodeErrorFrom(fail.Error.Message),
                 envId: this._getEnvIdFrom(fail.Error.Test),
                 country: this._mapCountryFrom(envIdValue),
+                request: this._mapReqFrom(fail.Source.Name),
             })
         })
+        this._initCountErrorByEnvId()
     }
     // private, structure: "EnvId: my_en - Status code is 200"
     _getEnvIdFrom(string) {
@@ -52,6 +75,21 @@ class FailResults {
     //private
     _mapCountryFrom(envId) {
         return csvMappingData.get(envId)
+    }
+    _mapReqFrom(issueType) {
+        return REQ[`${issueType}`]
+    }
+    _initCountErrorByEnvId() {
+        this.arrFail.forEach((error) => {
+            if (this._envIdMap.has(error.envId)) {
+                let currValue = this._envIdMap.get(error.envId)
+                this._envIdMap.set(error.envId, ++currValue)
+            } else this._envIdMap.set(error.envId, 1)
+        })
+        console.log(this._envIdMap)
+    }
+    getAggregationByEnvIds() {
+        return this._envIdMap
     }
 }
 const getMostRecentFile = (dir) => {
@@ -69,17 +107,13 @@ const orderReccentFiles = (dir) => {
         .sort((a, b) => b.mtime.getTime() - a.mtime.getTime())
 }
 
-async function readJsonResults(jsonPath) {
+async function getFormatedResults(jsonPath) {
     try {
         const file = await fs.readJson(jsonPath)
-        console.log(file)
-
         if (!csvMappingData) {
             csvMappingData = getMappedDataFromMappingFileCsv()
         }
-
-        const data = new Report(file)
-        console.dir(data)
+        return new Report(file)
     } catch (err) {
         console.error(
             'Something go wrong when reading the output.json file --> ',
@@ -100,20 +134,19 @@ const getMappedDataFromMappingFileCsv = () => {
         from_line: 1,
         skip_empty_lines: true,
     })
-    console.log(data)
-
     data.forEach((mapLine) => {
         map.set(`${mapLine.envId}`, mapLine.name)
     })
     return map
 }
 
-function getDataFromLastReportby(env) {
+async function getDataFromLastReportby(env) {
     const dir = env === ENVS.STAGING ? './reports/staging/' : './reports/prod/'
-    console.log(dir)
-
-    console.count(dir.concat(getMostRecentFile(dir).file))
-    readJsonResults(dir.concat(getMostRecentFile(dir).file))
+    const res = await getFormatedResults(
+        dir.concat(getMostRecentFile(dir).file)
+    )
+    console.log(res)
+    return res
 }
 
 export { getDataFromLastReportby }
