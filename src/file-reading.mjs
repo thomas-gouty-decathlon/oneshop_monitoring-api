@@ -86,7 +86,6 @@ class FailResults {
                 this._envIdMap.set(error.envId, ++currValue)
             } else this._envIdMap.set(error.envId, 1)
         })
-        console.log(this._envIdMap)
     }
     getAggregationByEnvIds() {
         return this._envIdMap

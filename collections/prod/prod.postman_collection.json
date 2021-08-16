@@ -1,288 +1,194 @@
 {
-	"info": {
-		"_postman_id": "e1c00862-0b11-430f-a45e-603a9c85b193",
-		"name": "OneShop API prod",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "CategoryList",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "a52c60e4-b1bf-429b-895d-b692c7bcd282"
-					},
-					{
-						"key": "Cache-Control",
-						"value": "no-cache",
-						"disabled": true
-					}
-				],
-				"url": {
-					"raw": "https://api.decathlon.net/decashop/dk/v1/categoryList?environmentId={{country}}",
-					"protocol": "https",
-					"host": [
-						"api",
-						"decathlon",
-						"net"
-					],
-					"path": [
-						"decashop",
-						"dk",
-						"v1",
-						"categoryList"
-					],
-					"query": [
-						{
-							"key": "environmentId",
-							"value": "{{country}}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "ProductList",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "a52c60e4-b1bf-429b-895d-b692c7bcd282"
-					}
-				],
-				"url": {
-					"raw": "https://api.decathlon.net/decashop/dk/v1/productList/:env/12845/DEFAULT",
-					"protocol": "https",
-					"host": [
-						"api",
-						"decathlon",
-						"net"
-					],
-					"path": [
-						"decashop",
-						"dk",
-						"v1",
-						"productList",
-						":env",
-						"12845",
-						"DEFAULT"
-					],
-					"variable": [
-						{
-							"key": "env",
-							"value": "{{country}}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Product Page",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "a52c60e4-b1bf-429b-895d-b692c7bcd282"
-					}
-				],
-				"url": {
-					"raw": "https://api.decathlon.net/decashop/dk/v1/getPageProduct?environmentId={{country}}&productId=8494856",
-					"protocol": "https",
-					"host": [
-						"api",
-						"decathlon",
-						"net"
-					],
-					"path": [
-						"decashop",
-						"dk",
-						"v1",
-						"getPageProduct"
-					],
-					"query": [
-						{
-							"key": "environmentId",
-							"value": "{{country}}"
-						},
-						{
-							"key": "productId",
-							"value": "8494856"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Search",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "a52c60e4-b1bf-429b-895d-b692c7bcd282"
-					}
-				],
-				"url": {
-					"raw": "https://api.decathlon.net/decashop/dk/v1/productSearch?environmentId={{country}}&query=8529458&filter=codeModel",
-					"protocol": "https",
-					"host": [
-						"api",
-						"decathlon",
-						"net"
-					],
-					"path": [
-						"decashop",
-						"dk",
-						"v1",
-						"productSearch"
-					],
-					"query": [
-						{
-							"key": "environmentId",
-							"value": "{{country}}"
-						},
-						{
-							"key": "query",
-							"value": "8529458"
-						},
-						{
-							"key": "filter",
-							"value": "codeModel"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Availability 1FF",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "a52c60e4-b1bf-429b-895d-b692c7bcd282"
-					}
-				],
-				"url": {
-					"raw": "https://api.decathlon.net/decashop/dk/v1/productSearch?environmentId={{country}}&query=8529458&filter=codeModel",
-					"protocol": "https",
-					"host": [
-						"api",
-						"decathlon",
-						"net"
-					],
-					"path": [
-						"decashop",
-						"dk",
-						"v1",
-						"productSearch"
-					],
-					"query": [
-						{
-							"key": "environmentId",
-							"value": "{{country}}"
-						},
-						{
-							"key": "query",
-							"value": "8529458"
-						},
-						{
-							"key": "filter",
-							"value": "codeModel"
-						}
-					]
-				}
-			},
-			"response": []
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					"let currrentCountry = pm.variables.get(\"country\");",
-					"console.log(currrentCountry)",
-					"",
-					"pm.test( \"EnvId: \" + currrentCountry + \" - Status code is 200\", function () {",
-					"    currrentCountry == undefined ? pm.test.skip : pm.response.to.have.status(200);",
-					"});",
-					""
-				]
-			}
-		}
-	]
+    "info": {
+        "_postman_id": "e1c00862-0b11-430f-a45e-603a9c85b193",
+        "name": "OneShop API prod",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "CategoryList",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [""],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "x-api-key",
+                        "value": "a52c60e4-b1bf-429b-895d-b692c7bcd282"
+                    },
+                    {
+                        "key": "Cache-Control",
+                        "value": "no-cache",
+                        "disabled": true
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.decathlon.net/decashop/dk/v1/categoryList?environmentId={{country}}",
+                    "protocol": "https",
+                    "host": ["api", "decathlon", "net"],
+                    "path": ["decashop", "dk", "v1", "categoryList"],
+                    "query": [
+                        {
+                            "key": "environmentId",
+                            "value": "{{country}}"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "ProductList",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [""],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "x-api-key",
+                        "value": "a52c60e4-b1bf-429b-895d-b692c7bcd282"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.decathlon.net/decashop/dk/v1/productList/:env/12845/DEFAULT",
+                    "protocol": "https",
+                    "host": ["api", "decathlon", "net"],
+                    "path": [
+                        "decashop",
+                        "dk",
+                        "v1",
+                        "productList",
+                        ":env",
+                        "12845",
+                        "DEFAULT"
+                    ],
+                    "variable": [
+                        {
+                            "key": "env",
+                            "value": "{{country}}"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "ProductPage",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [""],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "x-api-key",
+                        "value": "a52c60e4-b1bf-429b-895d-b692c7bcd282"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.decathlon.net/decashop/dk/v1/getPageProduct?environmentId={{country}}&productId=8494856",
+                    "protocol": "https",
+                    "host": ["api", "decathlon", "net"],
+                    "path": ["decashop", "dk", "v1", "getPageProduct"],
+                    "query": [
+                        {
+                            "key": "environmentId",
+                            "value": "{{country}}"
+                        },
+                        {
+                            "key": "productId",
+                            "value": "8494856"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Search",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [""],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "x-api-key",
+                        "value": "a52c60e4-b1bf-429b-895d-b692c7bcd282"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.decathlon.net/decashop/dk/v1/productSearch?environmentId={{country}}&query=8529458&filter=codeModel",
+                    "protocol": "https",
+                    "host": ["api", "decathlon", "net"],
+                    "path": ["decashop", "dk", "v1", "productSearch"],
+                    "query": [
+                        {
+                            "key": "environmentId",
+                            "value": "{{country}}"
+                        },
+                        {
+                            "key": "query",
+                            "value": "8529458"
+                        },
+                        {
+                            "key": "filter",
+                            "value": "codeModel"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [""]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    "let currrentCountry = pm.variables.get(\"country\");",
+                    "console.log(currrentCountry)",
+                    "",
+                    "pm.test( \"EnvId: \" + currrentCountry + \" - Status code is 200\", function () {",
+                    "    currrentCountry == undefined ? pm.test.skip : pm.response.to.have.status(200);",
+                    "});",
+                    ""
+                ]
+            }
+        }
+    ]
 }

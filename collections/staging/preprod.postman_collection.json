@@ -1,281 +1,240 @@
 {
-	"info": {
-		"_postman_id": "2ae8c356-eaae-4912-8e68-25d266ce2c16",
-		"name": "OneSHop API preprod",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "CategoryList",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"/* ",
-							"",
-							"pm.test(\"PreProd - CategoryList for all contries\"+ parent, function () {",
-							"    pm.globals.forEachParent(function(parent) {",
-							"        console.log(parent)",
-							"        pm.variables.set(\"country\", parent)",
-							"        pm.response.to.have.status(200);",
-							"    })",
-							"}); ",
-							"",
-							"",
-							"    pm.test(\"Status code is 200 for:\"+ parent, function () {",
-							"        console.log(parent)",
-							"        pm.variables.set(\"country\", parent)",
-							"        pm.response.to.have.status(200);",
-							"    }); ",
-							"*/"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ik1BSU4ifQ.eyJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIl0sImNsaWVudF9pZCI6ImRlY2FzaG9wX2NhbmFkYSIsImlzcyI6ImlkcGRlY2F0aGxvbiIsImp0aSI6ImVLWkJIZVR1cG8iLCJzdWIiOiJkZWNhc2hvcF9jYW5hZGEiLCJ1aWQiOiJkZWNhc2hvcF9jYW5hZGEiLCJleHAiOjE1NTcyNDAwMDB9.zGehO13BZ_sR8ZGn32KJvSEblI1__VJ18H1MVcPzkvujk2GEbW7Gkdco5bfcDtXcz-E1vHirFqd-lZfpTRvft-4v9ik6PbZxejaM6kQYZno4rMKCz9474vbAzOvumRJFhL8oLUoazUmVv8iA0KAchjD2UZHcXUeBbj9tn7X22vqP_bYa-P6SYfjn8GRsGTak6nXRWHRqI_4P_6P6tcawEpM768q9URy1ORfY1gl8fabnYtPUrEv5w-qgXnKEidIzWgiuy69C23dneHUA4jOSSdaLbE2yctoUMa-9jup2aZeaiLxJgEuVSKlIletWidkTttbtE53ta_EsO_v9Z4k8_w",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "88cdc7df-a9fe-423b-9849-6a40ebe370ee"
-					},
-					{
-						"key": "Cache-Control",
-						"value": "no-cache",
-						"disabled": true
-					}
-				],
-				"url": {
-					"raw": "https://api.preprod.decathlon.net/decashop/dk/v1/categoryList.json?environmentId={{country}}",
-					"protocol": "https",
-					"host": [
-						"api",
-						"preprod",
-						"decathlon",
-						"net"
-					],
-					"path": [
-						"decashop",
-						"dk",
-						"v1",
-						"categoryList.json"
-					],
-					"query": [
-						{
-							"key": "environmentId",
-							"value": "{{country}}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "ProductList",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"/* ",
-							"",
-							"pm.test(\"PreProd - CategoryList for all contries\"+ parent, function () {",
-							"    pm.globals.forEachParent(function(parent) {",
-							"        console.log(parent)",
-							"        pm.variables.set(\"country\", parent)",
-							"        pm.response.to.have.status(200);",
-							"    })",
-							"}); ",
-							"",
-							"",
-							"    pm.test(\"Status code is 200 for:\"+ parent, function () {",
-							"        console.log(parent)",
-							"        pm.variables.set(\"country\", parent)",
-							"        pm.response.to.have.status(200);",
-							"    }); ",
-							"*/"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "88cdc7df-a9fe-423b-9849-6a40ebe370ee"
-					}
-				],
-				"url": {
-					"raw": "https://api.preprod.decathlon.net/decashop/dk/v1/productList/:env/1797/DEFAULT",
-					"protocol": "https",
-					"host": [
-						"api",
-						"preprod",
-						"decathlon",
-						"net"
-					],
-					"path": [
-						"decashop",
-						"dk",
-						"v1",
-						"productList",
-						":env",
-						"1797",
-						"DEFAULT"
-					],
-					"variable": [
-						{
-							"key": "env",
-							"value": "{{country}}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Product Page",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "88cdc7df-a9fe-423b-9849-6a40ebe370ee"
-					}
-				],
-				"url": {
-					"raw": "https://api.preprod.decathlon.net/decashop/dk/v1/getPageProduct?environmentId={{country}}&productId=8304664",
-					"protocol": "https",
-					"host": [
-						"api",
-						"preprod",
-						"decathlon",
-						"net"
-					],
-					"path": [
-						"decashop",
-						"dk",
-						"v1",
-						"getPageProduct"
-					],
-					"query": [
-						{
-							"key": "environmentId",
-							"value": "{{country}}"
-						},
-						{
-							"key": "productId",
-							"value": "8304664"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Search",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "x-api-key",
-						"value": "88cdc7df-a9fe-423b-9849-6a40ebe370ee"
-					}
-				],
-				"url": {
-					"raw": "https://api.preprod.decathlon.net/decashop/dk/v1/productSearch?environmentId={{country}}&query=8304664&filter=codeModel",
-					"protocol": "https",
-					"host": [
-						"api",
-						"preprod",
-						"decathlon",
-						"net"
-					],
-					"path": [
-						"decashop",
-						"dk",
-						"v1",
-						"productSearch"
-					],
-					"query": [
-						{
-							"key": "environmentId",
-							"value": "{{country}}"
-						},
-						{
-							"key": "query",
-							"value": "8304664"
-						},
-						{
-							"key": "filter",
-							"value": "codeModel"
-						}
-					]
-				}
-			},
-			"response": []
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					"let currrentCountry = pm.variables.get(\"country\");",
-					"console.log(currrentCountry)",
-					"",
-					"pm.test( \"EnvId: \" + currrentCountry + \" - Status code is 200\", function () {",
-					"    currrentCountry == \"\" ? pm.test.skip : pm.response.to.have.status(200) || pm.response.to.have.status(404);",
-					"});",
-					""
-				]
-			}
-		}
-	]
+    "info": {
+        "_postman_id": "2ae8c356-eaae-4912-8e68-25d266ce2c16",
+        "name": "OneSHop API preprod",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "CategoryList",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "/* ",
+                            "",
+                            "pm.test(\"PreProd - CategoryList for all contries\"+ parent, function () {",
+                            "    pm.globals.forEachParent(function(parent) {",
+                            "        console.log(parent)",
+                            "        pm.variables.set(\"country\", parent)",
+                            "        pm.response.to.have.status(200);",
+                            "    })",
+                            "}); ",
+                            "",
+                            "",
+                            "    pm.test(\"Status code is 200 for:\"+ parent, function () {",
+                            "        console.log(parent)",
+                            "        pm.variables.set(\"country\", parent)",
+                            "        pm.response.to.have.status(200);",
+                            "    }); ",
+                            "*/"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ik1BSU4ifQ.eyJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIl0sImNsaWVudF9pZCI6ImRlY2FzaG9wX2NhbmFkYSIsImlzcyI6ImlkcGRlY2F0aGxvbiIsImp0aSI6ImVLWkJIZVR1cG8iLCJzdWIiOiJkZWNhc2hvcF9jYW5hZGEiLCJ1aWQiOiJkZWNhc2hvcF9jYW5hZGEiLCJleHAiOjE1NTcyNDAwMDB9.zGehO13BZ_sR8ZGn32KJvSEblI1__VJ18H1MVcPzkvujk2GEbW7Gkdco5bfcDtXcz-E1vHirFqd-lZfpTRvft-4v9ik6PbZxejaM6kQYZno4rMKCz9474vbAzOvumRJFhL8oLUoazUmVv8iA0KAchjD2UZHcXUeBbj9tn7X22vqP_bYa-P6SYfjn8GRsGTak6nXRWHRqI_4P_6P6tcawEpM768q9URy1ORfY1gl8fabnYtPUrEv5w-qgXnKEidIzWgiuy69C23dneHUA4jOSSdaLbE2yctoUMa-9jup2aZeaiLxJgEuVSKlIletWidkTttbtE53ta_EsO_v9Z4k8_w",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "x-api-key",
+                        "value": "88cdc7df-a9fe-423b-9849-6a40ebe370ee"
+                    },
+                    {
+                        "key": "Cache-Control",
+                        "value": "no-cache",
+                        "disabled": true
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.preprod.decathlon.net/decashop/dk/v1/categoryList.json?environmentId={{country}}",
+                    "protocol": "https",
+                    "host": ["api", "preprod", "decathlon", "net"],
+                    "path": ["decashop", "dk", "v1", "categoryList.json"],
+                    "query": [
+                        {
+                            "key": "environmentId",
+                            "value": "{{country}}"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "ProductList",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "/* ",
+                            "",
+                            "pm.test(\"PreProd - CategoryList for all contries\"+ parent, function () {",
+                            "    pm.globals.forEachParent(function(parent) {",
+                            "        console.log(parent)",
+                            "        pm.variables.set(\"country\", parent)",
+                            "        pm.response.to.have.status(200);",
+                            "    })",
+                            "}); ",
+                            "",
+                            "",
+                            "    pm.test(\"Status code is 200 for:\"+ parent, function () {",
+                            "        console.log(parent)",
+                            "        pm.variables.set(\"country\", parent)",
+                            "        pm.response.to.have.status(200);",
+                            "    }); ",
+                            "*/"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "x-api-key",
+                        "value": "88cdc7df-a9fe-423b-9849-6a40ebe370ee"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.preprod.decathlon.net/decashop/dk/v1/productList/:env/1797/DEFAULT",
+                    "protocol": "https",
+                    "host": ["api", "preprod", "decathlon", "net"],
+                    "path": [
+                        "decashop",
+                        "dk",
+                        "v1",
+                        "productList",
+                        ":env",
+                        "1797",
+                        "DEFAULT"
+                    ],
+                    "variable": [
+                        {
+                            "key": "env",
+                            "value": "{{country}}"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "ProductPage",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [""],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "x-api-key",
+                        "value": "88cdc7df-a9fe-423b-9849-6a40ebe370ee"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.preprod.decathlon.net/decashop/dk/v1/getPageProduct?environmentId={{country}}&productId=8304664",
+                    "protocol": "https",
+                    "host": ["api", "preprod", "decathlon", "net"],
+                    "path": ["decashop", "dk", "v1", "getPageProduct"],
+                    "query": [
+                        {
+                            "key": "environmentId",
+                            "value": "{{country}}"
+                        },
+                        {
+                            "key": "productId",
+                            "value": "8304664"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Search",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [""],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "x-api-key",
+                        "value": "88cdc7df-a9fe-423b-9849-6a40ebe370ee"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.preprod.decathlon.net/decashop/dk/v1/productSearch?environmentId={{country}}&query=8304664&filter=codeModel",
+                    "protocol": "https",
+                    "host": ["api", "preprod", "decathlon", "net"],
+                    "path": ["decashop", "dk", "v1", "productSearch"],
+                    "query": [
+                        {
+                            "key": "environmentId",
+                            "value": "{{country}}"
+                        },
+                        {
+                            "key": "query",
+                            "value": "8304664"
+                        },
+                        {
+                            "key": "filter",
+                            "value": "codeModel"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [""]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    "let currrentCountry = pm.variables.get(\"country\");",
+                    "console.log(currrentCountry)",
+                    "",
+                    "pm.test( \"EnvId: \" + currrentCountry + \" - Status code is 200\", function () {",
+                    "    currrentCountry == \"\" ? pm.test.skip : pm.response.to.have.status(200) || pm.response.to.have.status(404);",
+                    "});",
+                    ""
+                ]
+            }
+        }
+    ]
 }

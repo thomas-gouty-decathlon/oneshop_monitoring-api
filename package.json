@@ -6,8 +6,8 @@
     "author": "Thomas Gouty",
     "license": "MIT",
     "scripts": {
-        "start-server": "node index.js",
-        "start-dev": "nodemon index.js",
+        "start-server": "node index.mjs",
+        "start-dev": "nodemon index.mjs",
         "new_report": "npx zx ./newman_script.mjs"
     },
     "dependencies": {
