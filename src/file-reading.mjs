@@ -38,7 +38,7 @@ class Report {
     }
     _generateFailuresMapping(failures) {
         const res = new FailResults(failures)
-        return { errors: res.arrFail, mapping: res.getAggregationByEnvId() }
+        return { errors: res.arrFail, mapping: res._envIdMap }
     }
     _computeTimeDuration(start, end) {
         const d1 = new Date(start).getTime()
@@ -122,7 +122,6 @@ async function getFormatedResults(jsonPath) {
 }
 
 const getMappedDataFromMappingFileCsv = () => {
-    // call newman.run to pass `options` object and wait for callback
     const map = new Map()
     let data = fs.readFileSync('./csv/country_mapping.csv', {
         encoding: 'utf8',
@@ -144,7 +143,7 @@ async function getDataFromLastReportby(env) {
     const res = await getFormatedResults(
         dir.concat(getMostRecentFile(dir).file)
     )
-    console.log(res)
+    // console.log(res)
     return res
 }
 

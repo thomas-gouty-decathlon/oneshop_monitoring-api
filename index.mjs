@@ -1,11 +1,14 @@
 import express from 'express'
 import { spawn } from 'child_process'
-import cron from 'node-cron'
 
 import { getDataFromLastReportby } from './src/file-reading.mjs'
+import { initBotDiscord } from './src/discord-bot.mjs'
 
 const app = express()
 const port = 3001
+
+let lastReportS = null
+let lastReportP = null
 
 const ENVS = Object.freeze({
     STAGING: 1,
@@ -14,6 +17,16 @@ const ENVS = Object.freeze({
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
+})
+
+app.get('/change', (req, res) => {
+    lastReportP = lastReportS
+    res.send('ok!')
+    main()
+})
+
+app.listen(port, () => {
+    console.log(`Server running on  http://localhost:${port} 🚀🚀🚀 `)
 })
 
 function generateNewReports() {
@@ -40,13 +53,11 @@ function generateNewReports() {
     })
 }
 
-const main = () => {
-    getDataFromLastReportby(ENVS.STAGING)
+const main = async () => {
+    lastReportS = await getDataFromLastReportby(ENVS.STAGING)
+    lastReportP = await getDataFromLastReportby(ENVS.PROD)
+    initBotDiscord()
 }
 main()
 
-app.listen(port, () => {
-    console.log(`Server running on  http://localhost:${port} 🚀🚀🚀 `)
-})
-
-export { ENVS }
+export { ENVS, lastReportS, lastReportP }
