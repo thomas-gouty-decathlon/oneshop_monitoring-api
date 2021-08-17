@@ -8,14 +8,14 @@ let csvMappingData = null
 
 const REQ = Object.freeze({
     ProductPage:
-        'https://api.decathlon.net/decashop/dk/v1/getPageProduct?environmentId={{ENVID}}&productId=8494856',
+        'https://api.decathlon.net/decashop/dk/v1/getPageProduct?environmentId=ENVID_here&productId=8494856',
     ProductList:
-        'https://api.decathlon.net/decashop/dk/v1/productList/{{ENVID}}/12845/DEFAULT',
-    Search: 'https://api.decathlon.net/decashop/dk/v1/productSearch?environmentId={{ENVID}}&query=8529458&filter=codeModel',
+        'https://api.decathlon.net/decashop/dk/v1/productList/ENVID_here/12845/DEFAULT',
+    Search: 'https://api.decathlon.net/decashop/dk/v1/productSearch?environmentId=ENVID_here&query=8529458&filter=codeModel',
     CategoryList:
-        'https://api.decathlon.net/decashop/dk/v1/categoryList?environmentId={{ENVID}}',
+        'https://api.decathlon.net/decashop/dk/v1/categoryList?environmentId=ENVID_here',
     Availability1FF:
-        'https://api.decathlon.net/decashop/dk/v1/productSearch?environmentId={{ENVID}}&query=8529458&filter=codeModel',
+        'https://api.decathlon.net/decashop/dk/v1/productSearch?environmentId=ENVID_here&query=8529458&filter=codeModel',
 })
 class Report {
     constructor(file) {

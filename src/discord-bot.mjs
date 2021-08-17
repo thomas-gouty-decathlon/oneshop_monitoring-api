@@ -10,6 +10,93 @@ const monitoringChanId = '852560928192462859'
 const serverId = '850111368451326046'
 const PREFIX = '!'
 
+const embedWithoutFails = (data) =>
+    new MessageEmbed()
+        .setTitle(data.collectionName)
+        .setColor('#6AFF00')
+        .setDescription('- at: ' + data.launchTime)
+        .addFields({
+            name: `Request Failed: ${data.failReqNumber}/${data.totalReq}`,
+            value: `- Done in: ${data.executionTime}s`,
+        })
+
+const embedWithFails = (data) => {
+    // let cloneErrors = []
+    // cloneErrors = Object.create(cloneErrors, data.failures.errors)
+
+    function mapErrors() {
+        const toto = []
+        data.failures.errors.forEach((error, i) => {
+            if (i <= 6) {
+                toto.push(
+                    'Error on /' +
+                        error.issueType +
+                        ', Country: ' +
+                        error.country +
+                        ' - ' +
+                        error.envId +
+                        '\n' +
+                        error.errorCode +
+                        ' on GET - ' +
+                        error.request +
+                        '\n' +
+                        '\n'
+                )
+            }
+        })
+        console.log(toto)
+        data.failures.errors.slice(6)
+        return toto.length !== 0 ? toto.join(' ') : ''
+    }
+    return new MessageEmbed()
+        .setTitle(data.collectionName)
+        .setColor(0xff0000)
+        .setDescription('- at: ' + data.launchTime)
+        .addFields(
+            {
+                name: `Request Failed: ${data.failReqNumber}/${data.totalReq}`,
+                value: `- Done in: ${data.executionTime}s`,
+            },
+            { name: '\u200B', value: '\u200B' },
+            {
+                name: 'Errors details',
+                value: `${mapErrors()}`,
+            },
+            {
+                name: '\u200B',
+                value: `${mapErrors()}`,
+            },
+            {
+                name: '\u200B',
+                value: `${mapErrors()}`,
+            },
+            {
+                name: '\u200B',
+                value: `${mapErrors()}`,
+            },
+            {
+                name: '\u200B',
+                value: `${mapErrors()}`,
+            },
+            {
+                name: '\u200B',
+                value: `${mapErrors()}`,
+            },
+            {
+                name: '\u200B',
+                value: `${mapErrors()}`,
+            },
+            {
+                name: '\u200B',
+                value: `${mapErrors()}`,
+            },
+            {
+                name: '\u200B',
+                value: `${mapErrors()}`,
+            }
+        )
+}
+
 async function initBotDiscord(report) {
     async function sendSimpleMessage(text) {
         const guild = await client.guilds.fetch(serverId)
@@ -28,37 +115,13 @@ async function initBotDiscord(report) {
                 (channel) => channel.id === monitoringChanId
             )
 
-            const embed = new MessageEmbed()
-                // Set the title of the field
-                .setTitle(data.collectionName)
-                // Set the color of the embed
-                .setColor(0xff0000)
-                // Set the main content of the embed
-                .setDescription('- ' + data.launchTime)
-                .addFields(
-                    {
-                        name: `Request Failed: ${data.failReqNumber}/${data.totalReq}`,
-                        value: `- Done in: ${data.executionTime}s`,
-                    },
-                    { name: '\u200B', value: '\u200B' }, // for /n
-                    //add conditional error if not
-                    {
-                        name: 'Errors details',
-                        value: '\u200B',
-                        inline: false,
-                    },
-                    {
-                        name: 'Inline field title',
-                        value: 'Some value here',
-                        inline: true,
-                    },
-                    {
-                        name: 'Inline field title',
-                        value: 'Some value here',
-                        inline: true,
-                    }
-                )
+            const embed =
+                data.failures.errors.length == 0
+                    ? embedWithoutFails(data)
+                    : embedWithFails(data)
+
             channel.send(embed)
+            console.log(embed)
             console.log(
                 `[${new Date().toISOString}]: sent on discord: ${
                     data.collectionName
