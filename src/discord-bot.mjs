@@ -21,14 +21,20 @@ const embedWithoutFails = (data) =>
         })
 
 const embedWithFails = (data) => {
-    // let cloneErrors = []
-    // cloneErrors = Object.create(cloneErrors, data.failures.errors)
+    let cloneErrors = data.failures.errors.slice(0) // copy object
+    //remove404errors
+    cloneErrors = cloneErrors.filter((error) => {
+        if (error.errorCode !== 404) {
+            return error
+        }
+    })
+    const MAX_ITERATION_FIELD = 6
 
-    function mapErrors() {
-        const toto = []
-        data.failures.errors.forEach((error, i) => {
-            if (i <= 6) {
-                toto.push(
+    function mappingOneBatchOfDataErrors() {
+        const tmp = []
+        cloneErrors.forEach((error, i) => {
+            if (i < MAX_ITERATION_FIELD) {
+                tmp.push(
                     'Error on /' +
                         error.issueType +
                         ', Country: ' +
@@ -44,11 +50,10 @@ const embedWithFails = (data) => {
                 )
             }
         })
-        console.log(toto)
-        data.failures.errors.slice(6)
-        return toto.length !== 0 ? toto.join(' ') : ''
+        cloneErrors = cloneErrors.slice(6)
+        return tmp.length !== 0 ? tmp.join(' ') : ''
     }
-    return new MessageEmbed()
+    const embed = new MessageEmbed()
         .setTitle(data.collectionName)
         .setColor(0xff0000)
         .setDescription('- at: ' + data.launchTime)
@@ -60,41 +65,15 @@ const embedWithFails = (data) => {
             { name: '\u200B', value: '\u200B' },
             {
                 name: 'Errors details',
-                value: `${mapErrors()}`,
-            },
-            {
-                name: '\u200B',
-                value: `${mapErrors()}`,
-            },
-            {
-                name: '\u200B',
-                value: `${mapErrors()}`,
-            },
-            {
-                name: '\u200B',
-                value: `${mapErrors()}`,
-            },
-            {
-                name: '\u200B',
-                value: `${mapErrors()}`,
-            },
-            {
-                name: '\u200B',
-                value: `${mapErrors()}`,
-            },
-            {
-                name: '\u200B',
-                value: `${mapErrors()}`,
-            },
-            {
-                name: '\u200B',
-                value: `${mapErrors()}`,
-            },
-            {
-                name: '\u200B',
-                value: `${mapErrors()}`,
+                value: `${mappingOneBatchOfDataErrors()}`,
             }
         )
+
+    while (cloneErrors.length != 0) {
+        embed.addField('\u200B', `${mappingOneBatchOfDataErrors()}`)
+    }
+
+    return embed
 }
 
 async function initBotDiscord(report) {
@@ -105,7 +84,6 @@ async function initBotDiscord(report) {
                 (channel) => channel.id === monitoringChanId
             )
             channel.send(text)
-            console.log()
         }
     }
     async function sendMessageTemplateFrom(data) {
@@ -120,18 +98,19 @@ async function initBotDiscord(report) {
                     ? embedWithoutFails(data)
                     : embedWithFails(data)
 
-            channel.send(embed)
-            console.log(embed)
+            // channel.send(embed)
+            // console.log(embed)
             console.log(
-                `[${new Date().toISOString}]: sent on discord: ${
+                `[${new Date().toISOString()}] - Report sent on discord, with name: '${
                     data.collectionName
-                } - on channelId: ${channel.id}`
+                }' - at channelId: '${channel.id}'`
             )
+            return
         }
     }
 
-    function sendStagingAndProd() {
-        sendMessageTemplateFrom(lastReportS).then(() => {
+    async function sendStagingAndProd() {
+        await sendMessageTemplateFrom(lastReportS).then(() => {
             sendMessageTemplateFrom(lastReportP)
         })
     }
@@ -139,7 +118,7 @@ async function initBotDiscord(report) {
     client.on('ready', () => {
         console.log(`Bot ${client.user.tag} is on 🤖🤖🤖`)
         // test after init:
-        sendMessageTemplateFrom(lastReportS)
+        // sendMessageTemplateFrom(lastReportS)
 
         cron.schedule('15 09 16 * * 0-5', () => {
             console.log('running a message at every 8:30 AM of the week')
@@ -149,11 +128,19 @@ async function initBotDiscord(report) {
 
     client.on('message', async (msg) => {
         if (msg.author.bot) return
-        console.log(`[${msg.author.tag}]: ${msg.content}`)
-        console.log(msg.channel)
 
-        // Monitoring channel -->
-        if (msg.channel.id === monitoringChanId) {
+        const isGoodChannelAndPrefix =
+            msg.channel.id === monitoringChanId &&
+            msg.content.charAt(0) === PREFIX
+
+        if (isGoodChannelAndPrefix) {
+            switch (msg.content.trim().toLowerCase()) {
+                case '!newreports':
+                    break
+
+                default:
+                    break
+            }
             msg.channel.send(`hi ${msg.author.username}`)
             console.log(report)
         }

@@ -62,6 +62,7 @@ class FailResults {
                 request: this._mapReqFrom(fail.Source.Name),
             })
         })
+        this._remove404errors()
         this._initCountErrorByEnvId()
     }
     // private, structure: "EnvId: my_en - Status code is 200"
@@ -70,7 +71,7 @@ class FailResults {
     }
     // private, structure: "expected response to have status code 200 but got 404"
     _getCodeErrorFrom(string) {
-        return string.split(' ').pop()
+        return parseInt(string.split(' ').pop())
     }
     //private
     _mapCountryFrom(envId) {
@@ -85,6 +86,13 @@ class FailResults {
                 let currValue = this._envIdMap.get(error.envId)
                 this._envIdMap.set(error.envId, ++currValue)
             } else this._envIdMap.set(error.envId, 1)
+        })
+    }
+    _remove404errors() {
+        this.arrFail = this.arrFail.filter((error) => {
+            if (error.errorCode !== 404) {
+                return error
+            }
         })
     }
     getAggregationByEnvIds() {
