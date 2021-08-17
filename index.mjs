@@ -1,6 +1,5 @@
 import express from 'express'
-import { spawn } from 'child_process'
-// import EventEmitter from
+import { spawn, spawnSync } from 'child_process'
 
 import { getDataFromLastReportby } from './src/file-reading.mjs'
 import { initBotDiscord } from './src/discord-bot.mjs'
@@ -23,35 +22,36 @@ app.get('/', (req, res) => {
 app.get('/change', (req, res) => {
     lastReportP = lastReportS
     res.send('ok!')
-    main()
+})
+
+app.post('/new-reports', (req, res) => {
+    // secure call once at a time
+    try {
+        generatingNewReports()
+    } catch (error) {
+        res.send('something go wrong!')
+    }
+    console.log('toto')
+    res.send('done!')
 })
 
 app.listen(port, () => {
     console.log(`Server running on  http://localhost:${port} 🚀🚀🚀 `)
 })
 
-function generateNewReports() {
-    const child = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', [
-        'run',
-        'new_report',
+async function generatingNewReports() {
+    console.log('Start generatingNewReports...')
+    let command = spawnSync(/^win/.test(process.platform) ? 'npx.cmd' : 'npx', [
+        'zx',
+        './newman_script.mjs',
     ])
-
-    child.stdout.on('data', (data) => {
-        console.log(`${data}`)
-    })
-    child.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`)
-    })
-
-    child.on('error', (error) => {
-        console.error(`error: ${error.message}`)
-        res.send('Error!')
-    })
-    child.on('close', (code) => {
-        res.send(`done`)
-        console.log(`child process exited with code 0`)
-        child.kill()
-    })
+    if (command.status !== 0) {
+        console.error('something go wrong with the newman script', command)
+        throw command
+    }
+    lastReportS = await getDataFromLastReportby(ENVS.STAGING)
+    lastReportP = await getDataFromLastReportby(ENVS.PROD)
+    console.log('... END generatingNewReports')
 }
 
 const main = async () => {
@@ -61,4 +61,4 @@ const main = async () => {
 }
 main()
 
-export { ENVS, lastReportS, lastReportP }
+export { ENVS, lastReportS, lastReportP, generatingNewReports }

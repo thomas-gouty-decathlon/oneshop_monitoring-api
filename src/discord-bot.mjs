@@ -1,7 +1,7 @@
 import { Client, MessageEmbed } from 'discord.js'
 import dotenv from 'dotenv'
 import cron from 'node-cron'
-import { lastReportS, lastReportP } from '../index.mjs'
+import { lastReportS, lastReportP, generatingNewReports } from '../index.mjs'
 
 const client = new Client({})
 const config = dotenv.config({ path: './environements/.env' }).parsed
@@ -76,7 +76,7 @@ const embedWithFails = (data) => {
     return embed
 }
 
-async function initBotDiscord(report) {
+async function initBotDiscord() {
     async function sendSimpleMessage(text) {
         const guild = await client.guilds.fetch(serverId)
         if (guild) {
@@ -94,12 +94,12 @@ async function initBotDiscord(report) {
             )
 
             const embed =
-                data.failures.errors.length == 0
+                data.failures == null
                     ? embedWithoutFails(data)
                     : embedWithFails(data)
 
-            // channel.send(embed)
-            // console.log(embed)
+            channel.send(embed)
+            console.log(embed)
             console.log(
                 `[${new Date().toISOString()}] - Report sent on discord, with name: '${
                     data.collectionName
@@ -109,8 +109,9 @@ async function initBotDiscord(report) {
         }
     }
 
-    async function sendStagingAndProd() {
+    async function sendStagingAndProdReportMsg() {
         await sendMessageTemplateFrom(lastReportS).then(() => {
+            console.log('hi')
             sendMessageTemplateFrom(lastReportP)
         })
     }
@@ -122,27 +123,50 @@ async function initBotDiscord(report) {
 
         cron.schedule('15 09 16 * * 0-5', () => {
             console.log('running a message at every 8:30 AM of the week')
-            sendStagingAndProd()
+            sendStagingAndProdReportMsg()
         })
     })
 
-    client.on('message', async (msg) => {
+    client.on('message', (msg) => {
         if (msg.author.bot) return
-
+        const textMessage = msg.content
         const isGoodChannelAndPrefix =
             msg.channel.id === monitoringChanId &&
-            msg.content.charAt(0) === PREFIX
+            textMessage.charAt(0) === PREFIX
 
         if (isGoodChannelAndPrefix) {
-            switch (msg.content.trim().toLowerCase()) {
-                case '!newreports':
+            switch (textMessage.trim().toLowerCase()) {
+                case '!newreports': {
+                    msg.channel
+                        .send(`Start generatingNewReports...`)
+                        .then(() => {
+                            try {
+                                generatingNewReports().then(() => {
+                                    msg.channel
+                                        .send(`End generatingNewReports...`)
+                                        .then(() => {
+                                            console.log('coucou')
+                                            console.log(lastReportS)
+                                            sendStagingAndProdReportMsg()
+                                        })
+                                })
+                            } catch (error) {
+                                console.error('something go wrong with' + error)
+                            }
+                        })
+                    // .finally(() => {
+                    //     console.log('coucou')
+                    //     console.log(lastReportS)
+                    //     sendStagingAndProdReportMsg()
+                    // })
                     break
+                }
 
                 default:
                     break
             }
-            msg.channel.send(`hi ${msg.author.username}`)
-            console.log(report)
+            // msg.channel.send(`hi ${msg.author.username}`)
+            // console.log(report)
         }
     })
     // when new member come in --> welcome
