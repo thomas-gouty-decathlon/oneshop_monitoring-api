@@ -8,7 +8,7 @@
     "scripts": {
         "start-server": "node index.mjs",
         "start-dev": "nodemon index.mjs",
-        "new_report": "npx zx ./newman_script.mjs"
+        "new_reports": "npx zx ./newman_script.mjs"
     },
     "dependencies": {
         "csv": "^5.5.0",

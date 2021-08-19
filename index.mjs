@@ -1,5 +1,8 @@
 import express from 'express'
-import { spawn, spawnSync } from 'child_process'
+import { spawnSync } from 'child_process'
+import cron from 'node-cron'
+import dotenv from 'dotenv'
+const config = dotenv.config({ path: './environements/.env' }).parsed
 
 import { getDataFromLastReportby } from './src/file-reading.mjs'
 import { initBotDiscord } from './src/discord-bot.mjs'
@@ -15,24 +18,10 @@ const ENVS = Object.freeze({
     PROD: 2,
 })
 
+// app.use(express.static('public'))
+
 app.get('/', (req, res) => {
     res.send('Hello World!')
-})
-
-app.get('/change', (req, res) => {
-    lastReportP = lastReportS
-    res.send('ok!')
-})
-
-app.post('/new-reports', (req, res) => {
-    // secure call once at a time
-    try {
-        generatingNewReports()
-    } catch (error) {
-        res.send('something go wrong!')
-    }
-    console.log('toto')
-    res.send('done!')
 })
 
 app.listen(port, () => {
@@ -58,7 +47,10 @@ const main = async () => {
     lastReportS = await getDataFromLastReportby(ENVS.STAGING)
     lastReportP = await getDataFromLastReportby(ENVS.PROD)
     initBotDiscord()
+    cron.schedule('00 8 * * 0-5', () => {
+        generatingNewReports()
+    })
 }
 main()
 
-export { ENVS, lastReportS, lastReportP, generatingNewReports }
+export { ENVS, lastReportS, lastReportP, generatingNewReports, config }

@@ -1,5 +1,5 @@
 #custom
-reports/*
+public/reports/*
 environment/*
 
 # Logs

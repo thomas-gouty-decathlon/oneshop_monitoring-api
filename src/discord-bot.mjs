@@ -1,10 +1,13 @@
 import { Client, MessageEmbed } from 'discord.js'
-import dotenv from 'dotenv'
 import cron from 'node-cron'
-import { lastReportS, lastReportP, generatingNewReports } from '../index.mjs'
+import {
+    lastReportS,
+    lastReportP,
+    generatingNewReports,
+    config,
+} from '../index.mjs'
 
 const client = new Client({})
-const config = dotenv.config({ path: './environements/.env' }).parsed
 
 const monitoringChanId = '852560928192462859'
 const serverId = '850111368451326046'
@@ -15,10 +18,16 @@ const embedWithoutFails = (data) =>
         .setTitle(data.collectionName)
         .setColor('#6AFF00')
         .setDescription('- at: ' + data.launchTime)
-        .addFields({
-            name: `Request Failed: ${data.failReqNumber}/${data.totalReq}`,
-            value: `- Done in: ${data.executionTime}s`,
-        })
+        .addFields(
+            {
+                name: `Request Failed: ${data.failReqNumber}/${data.totalReq}`,
+                value: `- Done in: ${data.executionTime}s`,
+            },
+            {
+                name: `Details here -->`,
+                value: `${data.htmlLogsFile}`,
+            }
+        )
 
 const embedWithFails = (data) => {
     let cloneErrors = data.failures.errors.slice(0) // copy object
@@ -62,6 +71,10 @@ const embedWithFails = (data) => {
                 name: `Request Failed: ${data.failReqNumber}/${data.totalReq}`,
                 value: `- Done in: ${data.executionTime}s`,
             },
+            {
+                name: `Details here -->`,
+                value: `${data.htmlLogsFile}`,
+            },
             { name: '\u200B', value: '\u200B' },
             {
                 name: 'Errors details',
@@ -77,15 +90,6 @@ const embedWithFails = (data) => {
 }
 
 async function initBotDiscord() {
-    async function sendSimpleMessage(text) {
-        const guild = await client.guilds.fetch(serverId)
-        if (guild) {
-            const channel = client.channels.cache.find(
-                (channel) => channel.id === monitoringChanId
-            )
-            channel.send(text)
-        }
-    }
     async function sendMessageTemplateFrom(data) {
         const guild = await client.guilds.fetch(serverId)
         if (guild) {
@@ -94,86 +98,79 @@ async function initBotDiscord() {
             )
 
             const embed =
-                data.failures == null
+                data.failures == null || data.failures.errors.length === 0
                     ? embedWithoutFails(data)
                     : embedWithFails(data)
 
             channel.send(embed)
-            console.log(embed)
+            // console.log(embed)
             console.log(
                 `[${new Date().toISOString()}] - Report sent on discord, with name: '${
                     data.collectionName
                 }' - at channelId: '${channel.id}'`
             )
-            return
         }
     }
 
-    async function sendStagingAndProdReportMsg() {
-        await sendMessageTemplateFrom(lastReportS).then(() => {
-            console.log('hi')
-            sendMessageTemplateFrom(lastReportP)
-        })
-    }
-
-    client.on('ready', () => {
+    client.on('ready', async () => {
         console.log(`Bot ${client.user.tag} is on 🤖🤖🤖`)
-        // test after init:
-        // sendMessageTemplateFrom(lastReportS)
-
-        cron.schedule('15 09 16 * * 0-5', () => {
-            console.log('running a message at every 8:30 AM of the week')
-            sendStagingAndProdReportMsg()
+        // display the reports at every 8:30 AM of the week
+        cron.schedule('25 8 * * 0-5', async () => {
+            await sendMessageTemplateFrom(lastReportS)
+            await sendMessageTemplateFrom(lastReportP)
         })
     })
 
     client.on('message', (msg) => {
-        if (msg.author.bot) return
-        const textMessage = msg.content
-        const isGoodChannelAndPrefix =
-            msg.channel.id === monitoringChanId &&
-            textMessage.charAt(0) === PREFIX
+        if (msg.channel.id === monitoringChanId) {
+            if (msg.author.bot && msg.content.charAt(0) !== PREFIX) return
+            console.count(msg.content)
+            const textMessage = msg.content
+            const isGoodChannelAndPrefix =
+                msg.channel.id === monitoringChanId &&
+                textMessage.charAt(0) === PREFIX
 
-        if (isGoodChannelAndPrefix) {
-            switch (textMessage.trim().toLowerCase()) {
-                case '!newreports': {
-                    msg.channel
-                        .send(`Start generatingNewReports...`)
-                        .then(() => {
-                            try {
-                                generatingNewReports().then(() => {
-                                    msg.channel
-                                        .send(`End generatingNewReports...`)
-                                        .then(() => {
-                                            console.log('coucou')
-                                            console.log(lastReportS)
-                                            sendStagingAndProdReportMsg()
-                                        })
-                                })
-                            } catch (error) {
-                                console.error('something go wrong with' + error)
-                            }
-                        })
-                    // .finally(() => {
-                    //     console.log('coucou')
-                    //     console.log(lastReportS)
-                    //     sendStagingAndProdReportMsg()
-                    // })
-                    break
+            if (isGoodChannelAndPrefix) {
+                switch (textMessage.trim().toLowerCase()) {
+                    case '!newreports': {
+                        msg.channel
+                            .send(`Start generatingNewReports...`)
+                            .then(() => {
+                                try {
+                                    generatingNewReports().then(() => {
+                                        msg.channel.send(
+                                            `End generatingNewReports...`
+                                        )
+                                        msg.channel.send(`!lastProdReport`)
+                                        msg.channel.send(`!lastStagingReport`)
+                                    })
+                                } catch (error) {
+                                    console.error(
+                                        'something go wrong with' + error
+                                    )
+                                }
+                            })
+                        break
+                    }
+                    case '!lastprodreport': {
+                        sendMessageTemplateFrom(lastReportS)
+                        break
+                    }
+                    case '!laststagingreport': {
+                        sendMessageTemplateFrom(lastReportP)
+                        break
+                    }
+                    default:
+                        break
                 }
-
-                default:
-                    break
             }
-            // msg.channel.send(`hi ${msg.author.username}`)
-            // console.log(report)
         }
     })
     // when new member come in --> welcome
     client.on('guildMemberAdd', (member) => {
         member.guild.channels
             .get('850111368451326053')
-            .send(`Welcome ${member.user.username}`)
+            .send(`Welcome ${member.user.username} :)`)
     })
 
     client.login(config.TOKEN)

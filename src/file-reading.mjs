@@ -2,7 +2,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import parse from 'csv-parse/lib/sync.js'
 
-import { ENVS } from '../index.mjs'
+import { ENVS, config } from '../index.mjs'
 
 let csvMappingData = null
 
@@ -18,8 +18,9 @@ const REQ = Object.freeze({
         'https://api.decathlon.net/decashop/dk/v1/productSearch?environmentId=ENVID_here&query=8529458&filter=codeModel',
 })
 class Report {
-    constructor(file) {
+    constructor(file, filePath) {
         this.collectionName = file.Collection.Info.Name
+        this.htmlLogsFile = this._getHtmlPath(filePath)
         this.launchTime = new Date(file.Run.Timings.started).toLocaleString(
             'fr-FR',
             { timeZone: 'America/New_York' }
@@ -45,6 +46,21 @@ class Report {
         const d2 = new Date(end).getTime()
         const seconds = (d2 - d1) / 1000
         return seconds
+    }
+    _getHtmlPath(jsonPath) {
+        const date = path.win32
+            .basename(jsonPath)
+            .split('_')
+            .pop()
+            .split('.')
+            .shift()
+        const dirname = path.dirname(jsonPath).normalize()
+        const htmlPath = dirname
+            .concat('/html/html_report_' + date + '.html')
+            .split('/')
+            .slice(1)
+            .join('/')
+        return config.URL + htmlPath
     }
 }
 class FailResults {
@@ -120,7 +136,7 @@ async function getFormatedResults(jsonPath) {
         if (!csvMappingData) {
             csvMappingData = getMappedDataFromMappingFileCsv()
         }
-        return new Report(file)
+        return new Report(file, jsonPath)
     } catch (err) {
         console.error(
             'Something go wrong when reading the output.json file --> ',
@@ -147,12 +163,11 @@ const getMappedDataFromMappingFileCsv = () => {
 }
 
 async function getDataFromLastReportby(env) {
-    const dir = env === ENVS.STAGING ? './reports/staging/' : './reports/prod/'
-    const res = await getFormatedResults(
-        dir.concat(getMostRecentFile(dir).file)
-    )
-    // console.log(res)
-    return res
+    const dir =
+        env === ENVS.STAGING
+            ? './public/reports/staging/'
+            : './public/reports/prod/'
+    return getFormatedResults(dir.concat(getMostRecentFile(dir).file))
 }
 
 export { getDataFromLastReportby }
