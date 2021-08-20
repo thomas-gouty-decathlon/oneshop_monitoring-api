@@ -4,6 +4,8 @@ import cron from 'node-cron'
 import dotenv from 'dotenv'
 const config = dotenv.config({ path: './environements/.env' }).parsed
 
+config.URL = process.env.PROD_URL || config.URL
+
 import { getDataFromLastReportby } from './src/file-reading.mjs'
 import { initBotDiscord } from './src/discord-bot.mjs'
 
