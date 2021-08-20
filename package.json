@@ -1,12 +1,12 @@
 {
     "name": "server-reporter",
     "version": "1.0.0",
-    "description": "server of report generations",
-    "main": "app.js",
+    "description": "server for apis report generations and bot discord display",
+    "main": "index.mjs",
     "author": "Thomas Gouty",
     "license": "MIT",
     "scripts": {
-        "start-server": "node index.mjs",
+        "start": "node index.mjs",
         "start-dev": "nodemon index.mjs",
         "new_reports": "npx zx ./newman_script.mjs"
     },

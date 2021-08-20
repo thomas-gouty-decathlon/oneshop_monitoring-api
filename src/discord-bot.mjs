@@ -103,7 +103,6 @@ async function initBotDiscord() {
                     : embedWithFails(data)
 
             channel.send(embed)
-            // console.log(embed)
             console.log(
                 `[${new Date().toISOString()}] - Report sent on discord, with name: '${
                     data.collectionName
@@ -124,7 +123,6 @@ async function initBotDiscord() {
     client.on('message', (msg) => {
         if (msg.channel.id === monitoringChanId) {
             if (msg.author.bot && msg.content.charAt(0) !== PREFIX) return
-            console.count(msg.content)
             const textMessage = msg.content
             const isGoodChannelAndPrefix =
                 msg.channel.id === monitoringChanId &&

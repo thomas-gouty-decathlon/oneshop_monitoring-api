@@ -58,8 +58,8 @@ class Report {
         const htmlPath = dirname
             .concat('/html/html_report_' + date + '.html')
             .split('/')
-            .slice(1)
-            .join('/')
+            .slice(2)
+            .join('/') // remove : "./public"
         return config.URL + htmlPath
     }
 }
