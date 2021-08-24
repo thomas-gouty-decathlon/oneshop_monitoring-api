@@ -1,23 +1,23 @@
-#Monitoring-api Server
+# Monitoring-api Server
 
 ##Stack
-⋅⋅* NewMan-PostMan.
-⋅⋅* Express.
-⋅⋅* zx.
-⋅⋅* discordJs.
+* NewMan-PostMan
+* Express
+* zx
+* discordJs
 
-##PreRequest
+## PreRequest
 | Tables | Version |
 | ------------- |:-------------:|
 | nodejs | 16.x.x |
 
-##install
+## install
 `yarn install && yarn new_reports`
 OR
 `npm i`
 
-##start
-⋅⋅* simply:
+## start
+* simply:
 `yarn start-server `
-⋅⋅* for dev
+* for dev
 `nodemon ./app.js`
